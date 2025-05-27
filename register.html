@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Finance Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-wallet"></i>
+                    <h2>Finance Tracker</h2>
+                </div>
+                <p class="subtitle">Create your account to start tracking your finances.</p>
+            </div>
+
+            <div class="login-form">
+                <!-- Google Sign In Button -->
+                <div class="google-signin-section">
+                    <div id="g_id_onload"
+                         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-size="large"
+                         data-theme="outline"
+                         data-text="signup_with"
+                         data-shape="rectangular"
+                         data-logo_alignment="left">
+                    </div>
+                </div>
+
+                <div class="divider">
+                    <span>or</span>
+                </div>
+
+                <!-- Registration Form -->
+                <form id="registerForm" class="email-login-form">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" required placeholder="Enter your password">
+                            <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                                <i class="fas fa-eye" id="toggleIcon1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                                <i class="fas fa-eye" id="toggleIcon2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <label for="terms">I agree to the <a href="#" class="text-primary">Terms & Conditions</a></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        <span class="btn-text">Create Account</span>
+                        <i class="fas fa-spinner fa-spin btn-spinner" style="display: none;"></i>
+                    </button>
+                </form>
+
+                <div class="signup-link">
+                    <p>Already have an account? <a href="login.html">Sign in here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Info -->
+        <div class="demo-info">
+            <div class="demo-card">
+                <h5><i class="fas fa-star me-2"></i>Why Choose Us?</h5>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt text-success"></i>
+                        <span>Secure & Private</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line text-primary"></i>
+                        <span>Smart Insights</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-mobile-alt text-info"></i>
+                        <span>Mobile Friendly</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-sync text-warning"></i>
+                        <span>Real-time Sync</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Sign-In Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="JavaScript/storage.js"></script>
+    <script src="JavaScript/auth.js"></script>
+
+    <script>
+        // Handle Google Sign-In response
+        function handleCredentialResponse(response) {
+            const responsePayload = decodeJwtResponse(response.credential);
+            
+            // Store user data
+            const userData = {
+                id: responsePayload.sub,
+                name: responsePayload.name,
+                email: responsePayload.email,
+                imageUrl: responsePayload.picture,
+                provider: 'google',
+                loginTime: new Date().toISOString()
+            };
+
+            UserManager.setUser(userData);
+            showNotification('Account created successfully with Google!', 'success');
+            
+            // Redirect to dashboard
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        // Decode JWT token
+        function decodeJwtResponse(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // Registration form handler
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleRegistration();
+        });
+
+        function handleRegistration() {
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const termsAccepted = document.getElementById('terms').checked;
+
+            // Validation
+            if (!fullName || !email || !password || !confirmPassword) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showNotification('Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            if (!termsAccepted) {
+                showNotification('Please accept the terms and conditions', 'error');
+                return;
+            }
+
+            // Show loading state
+            showLoadingState(true);
+
+            // Simulate registration process
+            setTimeout(() => {
+                const userData = {
+                    id: 'user_' + Date.now(),
+                    name: fullName,
+                    email: email,
+                    imageUrl: 'https://via.placeholder.com/150',
+                    provider: 'email',
+                    loginTime: new Date().toISOString()
+                };
+
+                UserManager.setUser(userData);
+                showNotification('Account created successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }, 1500);
+        }
+
+        function showLoadingState(loading) {
+            const btnText = document.querySelector('.btn-text');
+            const btnSpinner = document.querySelector('.btn-spinner');
+            const registerBtn = document.querySelector('.login-btn');
+
+            if (loading) {
+                btnText.style.display = 'none';
+                btnSpinner.style.display = 'inline-block';
+                registerBtn.disabled = true;
+            } else {
+                btnText.style.display = 'inline-block';
+                btnSpinner.style.display = 'none';
+                registerBtn.disabled = false;
+            }
+        }
+
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleIcon = fieldId === 'password' ? document.getElementById('toggleIcon1') : document.getElementById('toggleIcon2');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            if (UserManager.isLoggedIn()) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+
+    <style>
+        .features-list {
+            margin-top: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .feature-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .feature-item span {
+            color: var(--black-color);
+            font-weight: 500;
+        }
+    </style>
+</body>
+</html> 

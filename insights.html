@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Insights - Finance Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="logo-details">
+            <i class="fas fa-wallet"></i>
+            <span class="logo_name">Finance Tracker</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="add.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span class="link_name">Add Transaction</span>
+                </a>
+            </li>
+            <li>
+                <a href="history.html">
+                    <i class="fas fa-history"></i>
+                    <span class="link_name">History</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="insights.html">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="link_name">Insights</span>
+                </a>
+            </li>
+            <li>
+                <a href="tips.html">
+                    <i class="fas fa-lightbulb"></i>
+                    <span class="link_name">Tips</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="home-section">
+        <nav class="navbar">
+            <div class="sidebar-button">
+                <i class="fas fa-bars sidebarBtn"></i>
+                <span>Financial Insights</span>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Search insights...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="profile-wrapper">
+                <div class="profile-details" id="profileToggle">
+                    <img src="https://via.placeholder.com/40" alt="Profile" id="profileImage">
+                    <span class="admin_name" id="userName">Thomas</span>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-header">
+                        <img src="https://via.placeholder.com/60" alt="Profile">
+                        <div class="user-info">
+                            <h5 id="dropdownUserName">Thomas</h5>
+                            <p id="dropdownUserEmail">thomas@site.com</p>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-body">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Help</span>
+                        </a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-footer">
+                        <a href="#" class="dropdown-item logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <!-- Financial Overview -->
+            <div class="overview-boxes">
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Total Income</div>
+                        <div class="number" id="totalIncome">$0.00</div>
+                        <div class="indicator">
+                            <i class="fas fa-arrow-up"></i>
+                            <span class="text">All time</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-money-bill-wave cart"></i>
+                </div>
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Total Expenses</div>
+                        <div class="number" id="totalExpenses">$0.00</div>
+                        <div class="indicator">
+                            <i class="fas fa-arrow-down down"></i>
+                            <span class="text">All time</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-shopping-cart cart two"></i>
+                </div>
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Net Balance</div>
+                        <div class="number" id="balance">$0.00</div>
+                        <div class="indicator">
+                            <i class="fas fa-wallet"></i>
+                            <span class="text">Current balance</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chart-line cart three"></i>
+                </div>
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Avg. Monthly</div>
+                        <div class="number" id="avgMonthly">$0.00</div>
+                        <div class="indicator">
+                            <i class="fas fa-calendar"></i>
+                            <span class="text">Average spending</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-calculator cart four"></i>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="sales-boxes">
+                <div class="box">
+                    <div class="title">
+                        <i class="fas fa-chart-bar me-2"></i>Income vs Expenses
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="incomeExpenseChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="title">
+                        <i class="fas fa-chart-pie me-2"></i>Expense Categories
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="categoryPieChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sales-boxes">
+                <div class="box">
+                    <div class="title">
+                        <i class="fas fa-chart-line me-2"></i>Monthly Trends
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="monthlyTrendChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="title">
+                        <i class="fas fa-trophy me-2"></i>Top Spending Categories
+                    </div>
+                    <div class="top-categories" id="topCategories">
+                        <!-- Top categories will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Tips Based on Data -->
+            <div class="sales-boxes">
+                <div class="box">
+                    <div class="title">
+                        <i class="fas fa-lightbulb me-2"></i>Personalized Insights
+                    </div>
+                    <div class="insights-list" id="personalizedInsights">
+                        <!-- Insights will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="JavaScript/storage.js"></script>
+    <script src="JavaScript/charts.js"></script>
+    <script src="JavaScript/auth.js"></script>
+    <script src="JavaScript/main.js"></script>
+    <script>
+        // Initialize insights page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateInsightsData();
+            initializeInsightCharts();
+        });
+
+        function updateInsightsData() {
+            const transactions = TransactionManager.getTransactions();
+            
+            // Update overview boxes
+            const totalIncome = Analytics.getTotalIncome(transactions);
+            const totalExpenses = Analytics.getTotalExpenses(transactions);
+            const balance = totalIncome - totalExpenses;
+            const avgMonthly = calculateAverageMonthlySpending(transactions);
+
+            document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
+            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('balance').textContent = formatCurrency(balance);
+            document.getElementById('avgMonthly').textContent = formatCurrency(avgMonthly);
+
+            // Update top categories
+            updateTopCategories(transactions);
+            
+            // Update personalized insights
+            updatePersonalizedInsights(transactions);
+        }
+
+        function calculateAverageMonthlySpending(transactions) {
+            const monthlyData = Analytics.getMonthlyData(transactions);
+            const months = Object.keys(monthlyData);
+            if (months.length === 0) return 0;
+            
+            const totalSpending = months.reduce((sum, month) => sum + monthlyData[month].expenses, 0);
+            return totalSpending / months.length;
+        }
+
+        function updateTopCategories(transactions) {
+            const expenseTransactions = transactions.filter(t => t.type === 'expense');
+            const categoryTotals = Analytics.getCategoryTotals(expenseTransactions);
+            const sortedCategories = Object.entries(categoryTotals)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5);
+
+            const container = document.getElementById('topCategories');
+            container.innerHTML = '';
+
+            if (sortedCategories.length === 0) {
+                container.innerHTML = '<p class="text-muted">No expense data available</p>';
+                return;
+            }
+
+            sortedCategories.forEach(([category, amount], index) => {
+                const percentage = (amount / Analytics.getTotalExpenses(expenseTransactions) * 100).toFixed(1);
+                const item = document.createElement('div');
+                item.className = 'category-item mb-3';
+                item.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-primary me-2">${index + 1}</span>
+                            <strong>${category}</strong>
+                        </div>
+                        <div class="text-end">
+                            <div>${formatCurrency(amount)}</div>
+                            <small class="text-muted">${percentage}%</small>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function updatePersonalizedInsights(transactions) {
+            const container = document.getElementById('personalizedInsights');
+            const insights = generateInsights(transactions);
+            
+            container.innerHTML = '';
+            
+            if (insights.length === 0) {
+                container.innerHTML = '<p class="text-muted">Add more transactions to get personalized insights</p>';
+                return;
+            }
+
+            insights.forEach(insight => {
+                const item = document.createElement('div');
+                item.className = 'insight-item mb-3 p-3 bg-light rounded';
+                item.innerHTML = `
+                    <div class="d-flex align-items-start">
+                        <i class="fas ${insight.icon} text-${insight.type} me-3 mt-1"></i>
+                        <div>
+                            <h6 class="mb-1">${insight.title}</h6>
+                            <p class="mb-0 text-muted">${insight.description}</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function generateInsights(transactions) {
+            const insights = [];
+            const totalIncome = Analytics.getTotalIncome(transactions);
+            const totalExpenses = Analytics.getTotalExpenses(transactions);
+            
+            if (transactions.length < 5) {
+                insights.push({
+                    icon: 'fa-info-circle',
+                    type: 'info',
+                    title: 'Get Started',
+                    description: 'Add more transactions to get detailed insights about your spending patterns.'
+                });
+                return insights;
+            }
+
+            // Savings rate insight
+            const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome * 100) : 0;
+            if (savingsRate > 20) {
+                insights.push({
+                    icon: 'fa-thumbs-up',
+                    type: 'success',
+                    title: 'Great Savings Rate!',
+                    description: `You're saving ${savingsRate.toFixed(1)}% of your income. Keep up the good work!`
+                });
+            } else if (savingsRate < 10) {
+                insights.push({
+                    icon: 'fa-exclamation-triangle',
+                    type: 'warning',
+                    title: 'Low Savings Rate',
+                    description: `You're only saving ${savingsRate.toFixed(1)}% of your income. Consider reducing expenses.`
+                });
+            }
+
+            // Top category insight
+            const expenseTransactions = transactions.filter(t => t.type === 'expense');
+            const categoryTotals = Analytics.getCategoryTotals(expenseTransactions);
+            const topCategory = Object.entries(categoryTotals).sort(([,a], [,b]) => b - a)[0];
+            
+            if (topCategory) {
+                const [category, amount] = topCategory;
+                const percentage = (amount / totalExpenses * 100).toFixed(1);
+                insights.push({
+                    icon: 'fa-chart-pie',
+                    type: 'info',
+                    title: 'Top Spending Category',
+                    description: `${category} accounts for ${percentage}% of your total expenses (${formatCurrency(amount)}).`
+                });
+            }
+
+            return insights;
+        }
+
+        function initializeInsightCharts() {
+            const transactions = TransactionManager.getTransactions();
+            if (transactions.length === 0) return;
+
+            // Initialize charts with actual data
+            updateCharts(transactions);
+        }
+    </script>
+</body>
+</html> 

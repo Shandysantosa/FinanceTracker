@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Tips - Finance Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="logo-details">
+            <i class="fas fa-wallet"></i>
+            <span class="logo_name">Finance Tracker</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="add.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span class="link_name">Add Transaction</span>
+                </a>
+            </li>
+            <li>
+                <a href="history.html">
+                    <i class="fas fa-history"></i>
+                    <span class="link_name">History</span>
+                </a>
+            </li>
+            <li>
+                <a href="insights.html">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="link_name">Insights</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="tips.html">
+                    <i class="fas fa-lightbulb"></i>
+                    <span class="link_name">Tips</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="home-section">
+        <nav class="navbar">
+            <div class="sidebar-button">
+                <i class="fas fa-bars sidebarBtn"></i>
+                <span>Financial Tips</span>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Search tips...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="profile-wrapper">
+                <div class="profile-details" id="profileToggle">
+                    <img src="https://via.placeholder.com/40" alt="Profile" id="profileImage">
+                    <span class="admin_name" id="userName">Thomas</span>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-header">
+                        <img src="https://via.placeholder.com/60" alt="Profile">
+                        <div class="user-info">
+                            <h5 id="dropdownUserName">Thomas</h5>
+                            <p id="dropdownUserEmail">thomas@site.com</p>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-body">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Help</span>
+                        </a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-footer">
+                        <a href="#" class="dropdown-item logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <div class="sales-boxes">
+                <div class="box">
+                    <div class="title">Budgeting Tips</div>
+                    <div class="details">
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">50/30/20 Rule</span>
+                                <p class="topic-description">Allocate 50% of income to needs, 30% to wants, and 20% to savings.</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Track Your Expenses</span>
+                                <p class="topic-description">Keep a record of all your spending to identify areas for improvement.</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Set Financial Goals</span>
+                                <p class="topic-description">Define clear, achievable financial goals and work towards them.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="title">Saving Tips</div>
+                    <div class="details">
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Emergency Fund</span>
+                                <p class="topic-description">Build an emergency fund covering 3-6 months of expenses.</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Automate Savings</span>
+                                <p class="topic-description">Set up automatic transfers to your savings account.</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Reduce Expenses</span>
+                                <p class="topic-description">Look for ways to cut unnecessary expenses and save more.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sales-boxes">
+                <div class="box">
+                    <div class="title">Investment Tips</div>
+                    <div class="details">
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Diversify Portfolio</span>
+                                <p class="topic-description">Spread your investments across different assets to reduce risk.</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Start Early</span>
+                                <p class="topic-description">Begin investing as early as possible to benefit from compound interest.</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Research Before Investing</span>
+                                <p class="topic-description">Understand your investments and their potential risks and returns.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="title">Debt Management</div>
+                    <div class="details">
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Pay High-Interest Debt First</span>
+                                <p class="topic-description">Focus on paying off debts with the highest interest rates first.</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Avoid New Debt</span>
+                                <p class="topic-description">Limit taking on new debt while paying off existing ones.</p>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle text-success"></i>
+                                <span class="topic">Debt Consolidation</span>
+                                <p class="topic-description">Consider consolidating multiple debts into a single, lower-interest loan.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="JavaScript/storage.js"></script>
+    <script src="JavaScript/auth.js"></script>
+    <script src="JavaScript/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Finance Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-wallet"></i>
+                    <h2>Finance Tracker</h2>
+                </div>
+                <p class="subtitle">Welcome back! Please sign in to your account.</p>
+            </div>
+
+            <div class="login-form">
+                <!-- Google Sign In Button -->
+                <div class="google-signin-section">
+                    <div id="g_id_onload"
+                         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                         data-callback="handleCredentialResponse"
+                         data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-size="large"
+                         data-theme="outline"
+                         data-text="sign_in_with"
+                         data-shape="rectangular"
+                         data-logo_alignment="left">
+                    </div>
+                </div>
+
+                <div class="divider">
+                    <span>or</span>
+                </div>
+
+                <!-- Email/Password Form -->
+                <form id="loginForm" class="email-login-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" required placeholder="Enter your password">
+                            <button type="button" class="toggle-password" onclick="togglePassword()">
+                                <i class="fas fa-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        <span class="btn-text">Sign In</span>
+                        <i class="fas fa-spinner fa-spin btn-spinner" style="display: none;"></i>
+                    </button>
+                </form>
+
+                <div class="signup-link">
+                    <p>Don't have an account? <a href="register.html">Sign up here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Account Info -->
+        <div class="demo-info">
+            <div class="demo-card">
+                <h5><i class="fas fa-info-circle me-2"></i>Demo Account</h5>
+                <p>For testing purposes, you can use:</p>
+                <div class="demo-credentials">
+                    <strong>Email:</strong> demo@financetracker.com<br>
+                    <strong>Password:</strong> demo123
+                </div>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="fillDemoCredentials()">
+                    Use Demo Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Sign-In Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="JavaScript/storage.js"></script>
+    <script src="JavaScript/auth.js"></script>
+
+    <script>
+        // Handle Google Sign-In response
+        function handleCredentialResponse(response) {
+            // Decode the JWT token
+            const responsePayload = decodeJwtResponse(response.credential);
+            
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log('Given Name: ' + responsePayload.given_name);
+            console.log('Family Name: ' + responsePayload.family_name);
+            console.log("Image URL: " + responsePayload.picture);
+            console.log("Email: " + responsePayload.email);
+
+            // Store user data
+            const userData = {
+                id: responsePayload.sub,
+                name: responsePayload.name,
+                email: responsePayload.email,
+                imageUrl: responsePayload.picture,
+                provider: 'google',
+                loginTime: new Date().toISOString()
+            };
+
+            UserManager.setUser(userData);
+            showNotification('Successfully signed in with Google!', 'success');
+            
+            // Redirect to dashboard
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        // Decode JWT token
+        function decodeJwtResponse(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // Email/Password login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleEmailLogin();
+        });
+
+        function handleEmailLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+
+            // Show loading state
+            showLoadingState(true);
+
+            // Demo account check
+            if (email === 'demo@financetracker.com' && password === 'demo123') {
+                const userData = {
+                    id: 'demo_user',
+                    name: 'Demo User',
+                    email: email,
+                    imageUrl: 'https://via.placeholder.com/150',
+                    provider: 'email',
+                    loginTime: new Date().toISOString()
+                };
+
+                UserManager.setUser(userData);
+                showNotification('Welcome, Demo User!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            } else {
+                // In a real application, you would send this to your backend
+                // For now, we'll simulate an error
+                setTimeout(() => {
+                    showLoadingState(false);
+                    showNotification('Invalid credentials. Try the demo account.', 'error');
+                }, 1000);
+            }
+        }
+
+        function showLoadingState(loading) {
+            const btnText = document.querySelector('.btn-text');
+            const btnSpinner = document.querySelector('.btn-spinner');
+            const loginBtn = document.querySelector('.login-btn');
+
+            if (loading) {
+                btnText.style.display = 'none';
+                btnSpinner.style.display = 'inline-block';
+                loginBtn.disabled = true;
+            } else {
+                btnText.style.display = 'inline-block';
+                btnSpinner.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        function fillDemoCredentials() {
+            document.getElementById('email').value = 'demo@financetracker.com';
+            document.getElementById('password').value = 'demo123';
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            if (UserManager.isLoggedIn()) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,367 @@
+/* Login Page Specific Styles */
+.login-body {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #5B51D8 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 30px;
+    align-items: start;
+}
+
+.login-card {
+    background: var(--white-color);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 450px;
+}
+
+.login-header {
+    background: var(--secondary-color);
+    padding: 40px 30px 30px;
+    text-align: center;
+}
+
+.login-header .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.login-header .logo i {
+    font-size: 40px;
+    color: var(--primary-color);
+    margin-right: 15px;
+}
+
+.login-header .logo h2 {
+    color: var(--black-color);
+    font-weight: 600;
+    margin: 0;
+    font-size: 28px;
+}
+
+.login-header .subtitle {
+    color: var(--text-color);
+    margin: 0;
+    font-size: 16px;
+}
+
+.login-form {
+    padding: 30px;
+}
+
+/* Google Sign In Section */
+.google-signin-section {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.g_id_signin {
+    width: 100% !important;
+}
+
+.g_id_signin > div {
+    margin: 0 auto !important;
+    width: 100% !important;
+}
+
+/* Divider */
+.divider {
+    position: relative;
+    text-align: center;
+    margin: 25px 0;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #E4E4E4;
+}
+
+.divider span {
+    background: var(--white-color);
+    padding: 0 20px;
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+/* Form Styles */
+.email-login-form .form-group {
+    margin-bottom: 20px;
+}
+
+.email-login-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--black-color);
+    font-size: 14px;
+}
+
+.email-login-form .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.email-login-form .input-group i {
+    position: absolute;
+    left: 15px;
+    color: var(--text-color);
+    font-size: 16px;
+    z-index: 2;
+}
+
+.email-login-form .input-group input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 2px solid #E4E4E4;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: var(--white-color);
+}
+
+.email-login-form .input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(105, 92, 254, 0.1);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 2;
+    padding: 5px;
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+/* Form Options */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: var(--primary-color);
+}
+
+.remember-me label {
+    color: var(--text-color);
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+    color: #5B51D8;
+}
+
+/* Login Button */
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.login-btn:hover:not(:disabled) {
+    background: #5B51D8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(105, 92, 254, 0.3);
+}
+
+.login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-spinner {
+    margin-left: 10px;
+}
+
+/* Sign up link */
+.signup-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.signup-link p {
+    color: var(--text-color);
+    margin: 0;
+}
+
+.signup-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Demo Info Card */
+.demo-info {
+    max-width: 300px;
+}
+
+.demo-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.demo-card h5 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.demo-card p {
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.demo-credentials {
+    background: var(--secondary-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--black-color);
+}
+
+.demo-card .btn {
+    width: 100%;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-container {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+        margin: 0 auto;
+    }
+
+    .demo-info {
+        max-width: 100%;
+        order: -1;
+    }
+
+    .demo-card {
+        margin-bottom: 20px;
+    }
+
+    .login-card {
+        max-width: 100%;
+    }
+
+    .login-header {
+        padding: 30px 20px 20px;
+    }
+
+    .login-form {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-body {
+        padding: 15px;
+    }
+
+    .login-header .logo h2 {
+        font-size: 24px;
+    }
+
+    .login-header .logo i {
+        font-size: 32px;
+    }
+
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+/* Animation for login card */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-card {
+    animation: slideUp 0.6s ease-out;
+}
+
+.demo-card {
+    animation: slideUp 0.6s ease-out 0.2s both;
+} 
