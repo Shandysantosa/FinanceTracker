@@ -59,7 +59,7 @@ const AuthManager = {
 
 // Google Sign-In Configuration
 const GoogleAuth = {
-    clientId: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Client ID
+    clientId: '951177710655-hktcr9qj45odpnepihu1uhlni7uvs1qj.apps.googleusercontent.com', // Replace with your actual Client ID
     
     // Initialize Google Sign-In
     init: function() {
@@ -147,32 +147,168 @@ const RouteProtection = {
     }
 };
 
-// Initialize authentication system
-AuthManager.init();
+// User Management
+const UserManager = {
+    setUser: function(userData) {
+        try {
+            // Set default profile picture if none provided
+            if (!userData.imageUrl) {
+                userData.imageUrl = 'contents/default_pp.jpg';
+            }
+            localStorage.setItem('user', JSON.stringify(userData));
+            
+            // Initialize default data for new users
+            if (!localStorage.getItem('transactions')) {
+                localStorage.setItem('transactions', JSON.stringify([]));
+            }
+            
+            // Initialize default settings
+            if (!localStorage.getItem('settings')) {
+                const defaultSettings = {
+                    theme: 'light',
+                    currency: 'USD',
+                    fontSize: 'medium',
+                    language: 'en',
+                    notifications: {
+                        email: true,
+                        browser: true
+                    },
+                    emailNotifications: userData.email
+                };
+                localStorage.setItem('settings', JSON.stringify(defaultSettings));
+            }
+            
+            this.updateProfileDisplay(userData);
+        } catch (error) {
+            console.error('Error setting user data:', error);
+            throw new Error('Failed to save user data');
+        }
+    },
+
+    getUser: function() {
+        try {
+            const userData = localStorage.getItem('user');
+            return userData ? JSON.parse(userData) : null;
+        } catch (error) {
+            console.error('Error getting user data:', error);
+            return null;
+        }
+    },
+
+    updateProfileDisplay: function(userData) {
+        try {
+            const profileImages = document.querySelectorAll('#profileImage, .dropdown-header img');
+            profileImages.forEach(img => {
+                img.src = userData.imageUrl || 'contents/default_pp.jpg';
+                img.onerror = function() {
+                    this.src = 'contents/default_pp.jpg';
+                };
+            });
+
+            const userNames = document.querySelectorAll('#userName, #dropdownUserName');
+            userNames.forEach(el => {
+                el.textContent = userData.name || 'Guest';
+            });
+
+            const userEmail = document.getElementById('dropdownUserEmail');
+            if (userEmail) {
+                userEmail.textContent = userData.email || 'guest@example.com';
+            }
+        } catch (error) {
+            console.error('Error updating profile display:', error);
+        }
+    },
+
+    isLoggedIn: function() {
+        try {
+            const user = this.getUser();
+            if (!user) return false;
+
+            // Check if login time is within the session timeout
+            const loginTime = new Date(user.loginTime);
+            const currentTime = new Date();
+            const sessionTimeout = 24 * 60 * 60 * 1000; // 24 hours
+            return currentTime - loginTime < sessionTimeout;
+        } catch (error) {
+            console.error('Error checking login status:', error);
+            return false;
+        }
+    },
+
+    logout: function() {
+        try {
+            // Clear all user data
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Clear any active sessions or tokens
+            if (typeof google !== 'undefined' && google.accounts) {
+                google.accounts.id.disableAutoSelect();
+            }
+            
+            showNotification('Successfully logged out', 'success');
+        } catch (error) {
+            console.error('Error during logout:', error);
+            showNotification('Error during logout', 'error');
+        }
+    },
+
+    refreshSession: function() {
+        try {
+            const user = this.getUser();
+            if (user) {
+                user.loginTime = new Date().toISOString();
+                this.setUser(user);
+            }
+        } catch (error) {
+            console.error('Error refreshing session:', error);
+        }
+    }
+};
+
+// Initialize authentication system with error handling
+try {
+    AuthManager.init();
+} catch (error) {
+    console.error('Error initializing auth system:', error);
+}
 
 // Check session expiry every 5 minutes
 setInterval(() => {
-    UserSessionManager.checkSessionExpiry();
+    try {
+        UserSessionManager.checkSessionExpiry();
+    } catch (error) {
+        console.error('Error checking session expiry:', error);
+    }
 }, 5 * 60 * 1000);
 
 // Activity tracker to refresh session on user activity
 let activityTimer;
 function resetActivityTimer() {
-    clearTimeout(activityTimer);
-    activityTimer = setTimeout(() => {
-        if (UserManager.isLoggedIn()) {
-            UserSessionManager.refreshSession();
-        }
-    }, 30 * 60 * 1000); // 30 minutes of inactivity
+    try {
+        clearTimeout(activityTimer);
+        activityTimer = setTimeout(() => {
+            if (UserManager.isLoggedIn()) {
+                UserManager.refreshSession();
+            }
+        }, 30 * 60 * 1000); // 30 minutes of inactivity
+    } catch (error) {
+        console.error('Error resetting activity timer:', error);
+    }
 }
 
-// Track user activity
+// Track user activity with error handling
 ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
-    document.addEventListener(event, resetActivityTimer, true);
+    try {
+        document.addEventListener(event, resetActivityTimer, true);
+    } catch (error) {
+        console.error(`Error adding ${event} listener:`, error);
+    }
 });
 
 // Export for global use
 window.AuthManager = AuthManager;
 window.GoogleAuth = GoogleAuth;
 window.UserSessionManager = UserSessionManager;
-window.RouteProtection = RouteProtection; 
+window.RouteProtection = RouteProtection;
+window.UserManager = UserManager; 

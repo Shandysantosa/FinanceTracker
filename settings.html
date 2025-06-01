@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Finance Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="logo-details">
+            <i class="fas fa-wallet"></i>
+            <span class="logo_name">Finance Tracker</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="add.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span class="link_name">Add Transaction</span>
+                </a>
+            </li>
+            <li>
+                <a href="history.html">
+                    <i class="fas fa-history"></i>
+                    <span class="link_name">History</span>
+                </a>
+            </li>
+            <li>
+                <a href="insights.html">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="link_name">Insights</span>
+                </a>
+            </li>
+            <li>
+                <a href="tips.html">
+                    <i class="fas fa-lightbulb"></i>
+                    <span class="link_name">Tips</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="home-section">
+        <nav class="navbar">
+            <div class="sidebar-button">
+                <i class="fas fa-bars sidebarBtn"></i>
+                <span>Settings</span>
+            </div>
+            <div class="profile-wrapper">
+                <div class="profile-details" id="profileToggle">
+                    <img src="https://via.placeholder.com/40" alt="Profile" id="profileImage">
+                    <span class="admin_name" id="userName">User</span>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-header">
+                        <img src="https://via.placeholder.com/60" alt="Profile">
+                        <div class="user-info">
+                            <h5 id="dropdownUserName">User</h5>
+                            <p id="dropdownUserEmail">user@example.com</p>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-body">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-footer">
+                        <a href="#" class="dropdown-item logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <div class="sales-boxes">
+                <div class="box">
+                    <div class="title">
+                        <i class="fas fa-cog me-2"></i>General Settings
+                    </div>
+                    <div class="settings-form mt-4">
+                        <div class="mb-4">
+                            <label class="form-label">Currency</label>
+                            <select class="form-select" id="currencySelect">
+                                <option value="USD">US Dollar ($)</option>
+                                <option value="EUR">Euro (€)</option>
+                                <option value="GBP">British Pound (£)</option>
+                                <option value="JPY">Japanese Yen (¥)</option>
+                                <option value="IDR">Indonesian Rupiah (Rp)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Date Format</label>
+                            <select class="form-select" id="dateFormatSelect">
+                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Font Size</label>
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-outline-secondary" id="decreaseFontBtn">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="mx-3" id="fontSizeDisplay">medium</span>
+                                <button type="button" class="btn btn-outline-secondary" id="increaseFontBtn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <button type="button" class="btn btn-danger" onclick="resetData()">
+                                <i class="fas fa-trash me-2"></i>Reset Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="title">
+                        <i class="fas fa-bell me-2"></i>Notifications
+                    </div>
+                    <div class="settings-form mt-4">
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="emailNotifications">
+                                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="browserNotifications">
+                                <label class="form-check-label" for="browserNotifications">Browser Notifications</label>
+                            </div>
+                        </div>
+
+                        <div id="emailSettingsSection">
+                            <div class="mb-4">
+                                <label class="form-label">Notification Email</label>
+                                <input type="email" class="form-control" id="notificationEmail" placeholder="Enter email">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="JavaScript/storage.js"></script>
+    <script src="JavaScript/auth.js"></script>
+    <script src="JavaScript/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved settings
+            loadSettings();
+
+            // Event listeners for settings changes
+            document.getElementById('currencySelect').addEventListener('change', updateCurrency);
+            document.getElementById('dateFormatSelect').addEventListener('change', updateDateFormat);
+            document.getElementById('decreaseFontBtn').addEventListener('click', () => changeFontSize('decrease'));
+            document.getElementById('increaseFontBtn').addEventListener('click', () => changeFontSize('increase'));
+            document.getElementById('emailNotifications').addEventListener('change', updateNotificationSettings);
+            document.getElementById('browserNotifications').addEventListener('change', updateNotificationSettings);
+            document.getElementById('notificationEmail').addEventListener('change', updateNotificationSettings);
+        });
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('settings')) || getDefaultSettings();
+            
+            // Set form values
+            document.getElementById('currencySelect').value = settings.currency;
+            document.getElementById('dateFormatSelect').value = settings.dateFormat;
+            document.getElementById('fontSizeDisplay').textContent = settings.fontSize;
+            document.getElementById('emailNotifications').checked = settings.notifications.email;
+            document.getElementById('browserNotifications').checked = settings.notifications.browser;
+            document.getElementById('notificationEmail').value = settings.emailNotifications || '';
+        }
+
+        function getDefaultSettings() {
+            return {
+                currency: 'USD',
+                fontSize: 'medium',
+                dateFormat: 'MM/DD/YYYY',
+                notifications: {
+                    email: false,
+                    browser: false
+                }
+            };
+        }
+
+        function updateCurrency() {
+            const settings = JSON.parse(localStorage.getItem('settings')) || getDefaultSettings();
+            settings.currency = document.getElementById('currencySelect').value;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            // Trigger a custom event to notify other pages
+            window.dispatchEvent(new CustomEvent('settingsChanged', { detail: { type: 'currency' } }));
+            showNotification('Currency updated successfully', 'success');
+        }
+
+        function updateDateFormat() {
+            const settings = JSON.parse(localStorage.getItem('settings')) || getDefaultSettings();
+            settings.dateFormat = document.getElementById('dateFormatSelect').value;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            // Trigger a custom event to notify other pages
+            window.dispatchEvent(new CustomEvent('settingsChanged', { detail: { type: 'dateFormat' } }));
+            showNotification('Date format updated successfully', 'success');
+        }
+
+        function changeFontSize(action) {
+            const fontSizes = ['small', 'medium', 'large'];
+            const settings = JSON.parse(localStorage.getItem('settings')) || getDefaultSettings();
+            let currentIndex = fontSizes.indexOf(settings.fontSize);
+            
+            if (action === 'increase' && currentIndex < fontSizes.length - 1) {
+                currentIndex++;
+            } else if (action === 'decrease' && currentIndex > 0) {
+                currentIndex--;
+            }
+            
+            settings.fontSize = fontSizes[currentIndex];
+            document.getElementById('fontSizeDisplay').textContent = settings.fontSize;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            
+            // Trigger a custom event to notify other pages
+            window.dispatchEvent(new CustomEvent('settingsChanged', { detail: { type: 'fontSize' } }));
+            showNotification('Font size updated successfully', 'success');
+        }
+
+        function updateNotificationSettings() {
+            const settings = JSON.parse(localStorage.getItem('settings')) || getDefaultSettings();
+            settings.notifications.email = document.getElementById('emailNotifications').checked;
+            settings.notifications.browser = document.getElementById('browserNotifications').checked;
+            settings.emailNotifications = document.getElementById('notificationEmail').value;
+            localStorage.setItem('settings', JSON.stringify(settings));
+            showNotification('Notification settings updated successfully', 'success');
+        }
+    </script>
+</body>
+</html> 

@@ -1,390 +1,358 @@
 // DOM Elements
-const transactionForm = document.getElementById('transactionForm');
-const transactionType = document.getElementById('type');
-const categorySelect = document.getElementById('category');
-const amountInput = document.getElementById('amount');
-const dateInput = document.getElementById('date');
-const descriptionInput = document.getElementById('description');
-const transactionTableBody = document.getElementById('transactionList');
-const filterType = document.getElementById('typeFilter');
-const filterCategory = document.getElementById('categoryFilter');
-const startDateFilter = document.getElementById('startDate');
-const endDateFilter = document.getElementById('endDate');
 const sidebarBtn = document.querySelector('.sidebarBtn');
 const sidebar = document.querySelector('.sidebar');
-
-// Profile dropdown elements
 const profileToggle = document.getElementById('profileToggle');
 const profileDropdown = document.getElementById('profileDropdown');
 const logoutBtn = document.getElementById('logoutBtn');
-
-// Dashboard elements
-const totalIncomeEl = document.getElementById('totalIncome');
-const totalExpensesEl = document.getElementById('totalExpenses');
-const balanceEl = document.getElementById('balance');
-const monthlyNetEl = document.getElementById('monthlyNet');
-const recentTransactionsEl = document.getElementById('recentTransactions');
+const transactionType = document.getElementById('type');
+const categorySelect = document.getElementById('category');
+const filterCategory = document.getElementById('categoryFilter');
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
+    try {
+        initializeApp();
+    } catch (error) {
+        console.error('Error initializing app:', error);
+        showNotification('Error initializing application. Please refresh the page.', 'error');
+    }
 });
 
 function initializeApp() {
-    // Initialize date input with today's date
-    if (dateInput) {
-        dateInput.valueAsDate = new Date();
+    // Check authentication first
+    if (!UserManager.isLoggedIn() && requiresAuth()) {
+        window.location.href = 'login.html';
+        return;
     }
 
     // Setup event listeners
     setupEventListeners();
     
-    // Update UI
-    updateDashboard();
-    updateTransactionTable();
+    // Load user profile
     loadUserProfile();
+    
+    // Update dashboard if on dashboard page
+    if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+        updateDashboard();
+    }
+
+    // Initialize categories
     populateCategories();
+
+    // Initialize settings
+    const settings = JSON.parse(localStorage.getItem('settings')) || {};
+    
+    // Apply theme
+    document.documentElement.setAttribute('data-theme', settings.theme || 'light');
+    
+    // Apply font size
+    applyFontSize(settings.fontSize || 'medium');
+    
+    // Update any displayed amounts and dates
+    updateDashboard();
+}
+
+function requiresAuth() {
+    const publicPages = ['login.html', 'register.html'];
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    return !publicPages.includes(currentPage);
 }
 
 function setupEventListeners() {
-    // Sidebar toggle
-    if (sidebarBtn) {
-        sidebarBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('close');
-        });
-    }
-
-    // Profile dropdown
-    if (profileToggle) {
-        profileToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            toggleProfileDropdown();
-        });
-    }
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (profileDropdown && !profileDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
-            closeProfileDropdown();
+    try {
+        // Sidebar toggle
+        if (sidebarBtn) {
+            sidebarBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('close');
+            });
         }
-    });
 
-    // Logout functionality
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            handleLogout();
-        });
-    }
-
-    // Transaction form submission
-    if (transactionForm) {
-        transactionForm.addEventListener('submit', handleTransactionSubmit);
-    }
-
-    // Transaction type change
-    if (transactionType) {
-        transactionType.addEventListener('change', function() {
-            updateCategories(this.value);
-        });
-    }
-
-    // Filter change events
-    if (filterType) filterType.addEventListener('change', updateTransactionTable);
-    if (filterCategory) filterCategory.addEventListener('change', updateTransactionTable);
-    if (startDateFilter) startDateFilter.addEventListener('change', updateTransactionTable);
-    if (endDateFilter) endDateFilter.addEventListener('change', updateTransactionTable);
-}
-
-// Profile dropdown functions
-function toggleProfileDropdown() {
-    profileToggle.classList.toggle('active');
-    profileDropdown.classList.toggle('active');
-}
-
-function closeProfileDropdown() {
-    profileToggle.classList.remove('active');
-    profileDropdown.classList.remove('active');
-}
-
-function loadUserProfile() {
-    const user = UserManager.getUser();
-    if (user) {
-        document.getElementById('userName').textContent = user.name || 'Thomas';
-        document.getElementById('dropdownUserName').textContent = user.name || 'Thomas';
-        document.getElementById('dropdownUserEmail').textContent = user.email || 'thomas@site.com';
-        
-        if (user.imageUrl) {
-            document.getElementById('profileImage').src = user.imageUrl;
-            document.querySelector('.dropdown-header img').src = user.imageUrl;
+        // Profile dropdown toggle
+        if (profileToggle) {
+            profileToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                profileDropdown.classList.toggle('active');
+            });
         }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (profileDropdown && !profileDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
+                profileDropdown.classList.remove('active');
+            }
+        });
+
+        // Logout button
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await handleLogout();
+            });
+        }
+
+        // Transaction type change event
+        if (transactionType) {
+            transactionType.addEventListener('change', function() {
+                updateCategories(this.value);
+            });
+        }
+
+        // Add keyboard navigation for dropdown
+        if (profileDropdown) {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && profileDropdown.classList.contains('active')) {
+                    profileDropdown.classList.remove('active');
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error setting up event listeners:', error);
     }
 }
 
-function handleLogout() {
-    // Use the AuthManager logout function for consistency
-    AuthManager.logout().then((loggedOut) => {
-        if (loggedOut) {
-            // Reset to default values
-            document.getElementById('userName').textContent = 'Guest';
-            document.getElementById('dropdownUserName').textContent = 'Guest';
-            document.getElementById('dropdownUserEmail').textContent = 'guest@example.com';
-            document.getElementById('profileImage').src = 'https://via.placeholder.com/40';
-            document.querySelector('.dropdown-header img').src = 'https://via.placeholder.com/60';
-            closeProfileDropdown();
-        }
-    });
-}
-
-// Category management
 function populateCategories() {
-    if (categorySelect) {
-        const type = transactionType ? transactionType.value : 'expense';
-        updateCategories(type);
-    }
+    try {
+        if (categorySelect) {
+            const type = transactionType ? transactionType.value : 'expense';
+            updateCategories(type);
+        }
 
-    if (filterCategory) {
-        filterCategory.innerHTML = '<option value="">All Categories</option>';
-        const allCategories = [...categories.income, ...categories.expense];
-        const uniqueCategories = [...new Set(allCategories)];
-        
-        uniqueCategories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            filterCategory.appendChild(option);
-        });
+        if (filterCategory) {
+            filterCategory.innerHTML = '<option value="">All Categories</option>';
+            const allCategories = [...categories.income, ...categories.expense];
+            const uniqueCategories = [...new Set(allCategories)];
+            
+            uniqueCategories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                filterCategory.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error populating categories:', error);
+        showNotification('Error loading categories', 'error');
     }
 }
 
 function updateCategories(type) {
-    if (!categorySelect) return;
-    
-    categorySelect.innerHTML = '<option value="">Select Category</option>';
-    const typeCategories = categories[type] || [];
-    
-    typeCategories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-        categorySelect.appendChild(option);
-    });
+    try {
+        if (!categorySelect) return;
+        
+        categorySelect.innerHTML = '<option value="">Select Category</option>';
+        const categoryList = type === 'income' ? categories.income : categories.expense;
+        
+        categoryList.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categorySelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error updating categories:', error);
+    }
 }
 
-// Transaction handling
-function handleTransactionSubmit(e) {
-    e.preventDefault();
-    
+function loadUserProfile() {
     try {
-        const transaction = {
-            type: transactionType.value,
-            amount: parseFloat(amountInput.value),
-            category: categorySelect.value,
-            date: dateInput.value,
-            description: descriptionInput.value || ''
-        };
-
-        // Validation
-        if (!transaction.type || !transaction.amount || !transaction.category || !transaction.date) {
-            showNotification('Please fill in all required fields', 'error');
+        const user = UserManager.getUser();
+        if (!user) {
+            if (requiresAuth()) {
+                window.location.href = 'login.html';
+            }
             return;
         }
 
-        if (transaction.amount <= 0) {
-            showNotification('Amount must be greater than 0', 'error');
-            return;
-        }
+        // Update profile elements
+        updateProfileElements(user);
+    } catch (error) {
+        console.error('Error loading user profile:', error);
+    }
+}
 
-        TransactionManager.addTransaction(transaction);
-        updateDashboard();
-        updateTransactionTable();
-        
-        // Reset form
-        transactionForm.reset();
-        if (dateInput) dateInput.valueAsDate = new Date();
-        
-        showNotification('Transaction added successfully!', 'success');
-        
-        // Redirect to dashboard if on add page
-        if (window.location.pathname.includes('add.html')) {
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
+function updateProfileElements(user) {
+    try {
+        // Update all profile images
+        const profileImages = document.querySelectorAll('#profileImage, .dropdown-header img');
+        profileImages.forEach(img => {
+            if (img) {
+                img.src = user.imageUrl || 'contents/default_pp.jpg';
+                img.onerror = function() {
+                    this.src = 'contents/default_pp.jpg';
+                };
+            }
+        });
+
+        // Update username
+        const userNameElements = document.querySelectorAll('#userName, #dropdownUserName');
+        userNameElements.forEach(el => {
+            if (el) el.textContent = user.name || 'User';
+        });
+
+        // Update email
+        const userEmailElement = document.getElementById('dropdownUserEmail');
+        if (userEmailElement) {
+            userEmailElement.textContent = user.email || '';
+            userEmailElement.title = user.email || ''; // Add tooltip for long emails
         }
     } catch (error) {
-        console.error('Error adding transaction:', error);
-        showNotification('Error adding transaction', 'error');
+        console.error('Error updating profile elements:', error);
     }
 }
 
-// Dashboard updates
-function updateDashboard() {
-    const transactions = TransactionManager.getTransactions();
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    
-    // Filter transactions for current month
-    const monthlyTransactions = transactions.filter(t => {
-        const transactionDate = new Date(t.date);
-        return transactionDate.getMonth() === currentMonth && 
-               transactionDate.getFullYear() === currentYear;
-    });
-
-    const totalIncome = Analytics.getTotalIncome(transactions);
-    const totalExpenses = Analytics.getTotalExpenses(transactions);
-    const balance = totalIncome - totalExpenses;
-    const monthlyNet = Analytics.getTotalIncome(monthlyTransactions) - Analytics.getTotalExpenses(monthlyTransactions);
-
-    // Update overview boxes
-    if (totalIncomeEl) totalIncomeEl.textContent = formatCurrency(totalIncome);
-    if (totalExpensesEl) totalExpensesEl.textContent = formatCurrency(totalExpenses);
-    if (balanceEl) balanceEl.textContent = formatCurrency(balance);
-    if (monthlyNetEl) monthlyNetEl.textContent = formatCurrency(monthlyNet);
-
-    // Update recent transactions
-    updateRecentTransactions(transactions);
-}
-
-function updateRecentTransactions(transactions) {
-    if (!recentTransactionsEl) return;
-
-    const recentTransactions = transactions
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 5);
-
-    recentTransactionsEl.innerHTML = '';
-
-    if (recentTransactions.length === 0) {
-        recentTransactionsEl.innerHTML = '<li class="no-transactions">No transactions yet</li>';
-        return;
-    }
-
-    recentTransactions.forEach(transaction => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <div class="transaction-info">
-                <span class="transaction-category">${transaction.category}</span>
-                <span class="transaction-date">${formatDate(transaction.date)}</span>
-            </div>
-            <span class="transaction-amount ${transaction.type}">
-                ${transaction.type === 'income' ? '+' : '-'}${formatCurrency(Math.abs(transaction.amount))}
-            </span>
-        `;
-        recentTransactionsEl.appendChild(li);
-    });
-}
-
-// Transaction table updates
-function updateTransactionTable() {
-    if (!transactionTableBody) return;
-    
-    let transactions = TransactionManager.getTransactions();
-    
-    // Apply filters
-    if (filterType && filterType.value) {
-        transactions = transactions.filter(t => t.type === filterType.value);
-    }
-    if (filterCategory && filterCategory.value) {
-        transactions = transactions.filter(t => t.category === filterCategory.value);
-    }
-    if (startDateFilter && startDateFilter.value) {
-        transactions = transactions.filter(t => t.date >= startDateFilter.value);
-    }
-    if (endDateFilter && endDateFilter.value) {
-        transactions = transactions.filter(t => t.date <= endDateFilter.value);
-    }
-    
-    // Sort transactions by date (newest first)
-    transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    // Clear table
-    transactionTableBody.innerHTML = '';
-    
-    if (transactions.length === 0) {
-        transactionTableBody.innerHTML = `
-            <tr>
-                <td colspan="6" class="text-center">No transactions found</td>
-            </tr>
-        `;
-        return;
-    }
-    
-    // Add transactions to table
-    transactions.forEach(transaction => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${formatDate(transaction.date)}</td>
-            <td><span class="badge ${transaction.type === 'income' ? 'bg-success' : 'bg-danger'}">${capitalizeFirst(transaction.type)}</span></td>
-            <td>${transaction.category}</td>
-            <td>${formatCurrency(transaction.amount)}</td>
-            <td>${transaction.description || '-'}</td>
-            <td>
-                <button class="btn btn-sm btn-danger" onclick="deleteTransaction(${transaction.id})" title="Delete transaction">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        `;
-        transactionTableBody.appendChild(row);
-    });
-}
-
-// Delete transaction
-function deleteTransaction(id) {
-    if (confirm('Are you sure you want to delete this transaction?')) {
-        try {
-            TransactionManager.deleteTransaction(id);
-            updateDashboard();
-            updateTransactionTable();
-            showNotification('Transaction deleted successfully', 'success');
-        } catch (error) {
-            console.error('Error deleting transaction:', error);
-            showNotification('Error deleting transaction', 'error');
+async function handleLogout() {
+    try {
+        if (confirm('Are you sure you want to logout?')) {
+            UserManager.logout();
+            window.location.href = 'login.html';
         }
+    } catch (error) {
+        console.error('Error during logout:', error);
+        showNotification('Error logging out. Please try again.', 'error');
     }
 }
 
-// Utility functions
+function updateDashboard() {
+    try {
+        const elements = {
+            totalIncome: document.getElementById('totalIncome'),
+            totalExpenses: document.getElementById('totalExpenses'),
+            balance: document.getElementById('balance'),
+            monthlyNet: document.getElementById('monthlyNet')
+        };
+
+        if (Object.values(elements).some(el => el)) {
+            const transactions = TransactionManager.getTransactions();
+            const totals = calculateTotals(transactions);
+            updateDashboardElements(elements, totals);
+        }
+    } catch (error) {
+        console.error('Error updating dashboard:', error);
+        showNotification('Error updating dashboard data', 'error');
+    }
+}
+
+function calculateTotals(transactions) {
+    const totalIncome = transactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+    
+    const totalExpenses = transactions
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+    
+    return {
+        totalIncome,
+        totalExpenses,
+        balance: totalIncome - totalExpenses
+    };
+}
+
+function updateDashboardElements(elements, totals) {
+    if (elements.totalIncome) elements.totalIncome.textContent = formatCurrency(totals.totalIncome);
+    if (elements.totalExpenses) elements.totalExpenses.textContent = formatCurrency(totals.totalExpenses);
+    if (elements.balance) elements.balance.textContent = formatCurrency(totals.balance);
+    if (elements.monthlyNet) elements.monthlyNet.textContent = formatCurrency(totals.balance);
+}
+
 function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-    }).format(amount);
-}
+    try {
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
+        const currencySymbols = {
+            'USD': '$',
+            'EUR': '€',
+            'GBP': '£',
+            'JPY': '¥',
+            'IDR': 'Rp'
+        };
 
-function formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    });
-}
+        const symbol = currencySymbols[settings.currency] || '$';
+        const formatter = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
 
-function capitalizeFirst(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+        return settings.currency === 'IDR' 
+            ? `${symbol} ${formatter.format(amount)}`
+            : `${symbol}${formatter.format(amount)}`;
+    } catch (error) {
+        console.error('Error formatting currency:', error);
+        return `$${amount.toFixed(2)}`;
+    }
 }
 
 function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-        <span>${message}</span>
-    `;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => notification.classList.add('show'), 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
+    try {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
+        `;
+        
+        document.body.appendChild(notification);
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    } catch (error) {
+        console.error('Error showing notification:', error);
+    }
 }
 
-// Export functions for global access
-window.deleteTransaction = deleteTransaction;
+// Add settings change listener
+window.addEventListener('settingsChanged', function(e) {
+    const settings = JSON.parse(localStorage.getItem('settings')) || {};
+    
+    switch(e.detail.type) {
+        case 'theme':
+            document.documentElement.setAttribute('data-theme', settings.theme);
+            break;
+        case 'currency':
+            // Refresh any displayed amounts
+            updateDashboard();
+            break;
+        case 'dateFormat':
+            // Refresh any displayed dates
+            updateDashboard();
+            break;
+        case 'fontSize':
+            applyFontSize(settings.fontSize);
+            break;
+    }
+});
+
+function applyFontSize(size) {
+    const fontSizes = {
+        small: '14px',
+        medium: '16px',
+        large: '18px'
+    };
+    document.documentElement.style.setProperty('--font-size-base', fontSizes[size]);
+}
+
+function formatDate(dateString) {
+    try {
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
+        const date = new Date(dateString);
+        
+        switch(settings.dateFormat) {
+            case 'DD/MM/YYYY':
+                return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+            case 'YYYY-MM-DD':
+                return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            default: // MM/DD/YYYY
+                return `${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}/${date.getFullYear()}`;
+        }
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return dateString;
+    }
+}
+
+// Export functions that need to be accessed globally
+window.handleLogout = handleLogout;
+window.showNotification = showNotification;

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Finance Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="logo-details">
+            <i class="fas fa-wallet"></i>
+            <span class="logo_name">Finance Tracker</span>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="add.html">
+                    <i class="fas fa-plus-circle"></i>
+                    <span class="link_name">Add Transaction</span>
+                </a>
+            </li>
+            <li>
+                <a href="history.html">
+                    <i class="fas fa-history"></i>
+                    <span class="link_name">History</span>
+                </a>
+            </li>
+            <li>
+                <a href="insights.html">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="link_name">Insights</span>
+                </a>
+            </li>
+            <li>
+                <a href="tips.html">
+                    <i class="fas fa-lightbulb"></i>
+                    <span class="link_name">Tips</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="home-section">
+        <nav class="navbar">
+            <div class="sidebar-button">
+                <i class="fas fa-bars sidebarBtn"></i>
+                <span>Profile</span>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Search...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="profile-wrapper">
+                <div class="profile-details" id="profileToggle">
+                    <img src="contents/default_pp.jpg" alt="Profile" id="profileImage">
+                    <span class="admin_name" id="userName">User</span>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="dropdown-header">
+                        <img src="contents/default_pp.jpg" alt="Profile">
+                        <div class="user-info">
+                            <h5 id="dropdownUserName">User</h5>
+                            <p id="dropdownUserEmail">user@example.com</p>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-body">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="settings.html" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="help.html" class="dropdown-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Help</span>
+                        </a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-footer">
+                        <a href="#" class="dropdown-item logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <div class="sales-boxes">
+                <div class="box">
+                    <div class="title">Profile Information</div>
+                    <div class="profile-content">
+                        <div class="profile-header text-center mb-4">
+                            <div class="profile-pic-wrapper">
+                                <img src="contents/default_pp.jpg" alt="Profile Picture" id="profilePic" class="profile-pic">
+                                <div class="pic-overlay">
+                                    <label for="profilePicInput" class="mb-0">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Change Photo</span>
+                                    </label>
+                                    <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <form id="profileForm" class="profile-form">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="birthDate" class="form-label">Birth Date</label>
+                                    <input type="date" class="form-control" id="birthDate">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="bio" class="form-label">Bio</label>
+                                <textarea class="form-control" id="bio" rows="3"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="title">Account Settings</div>
+                    <div class="account-settings">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h6>Email Notifications</h6>
+                                <p>Receive email updates about your account</p>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h6>Two-Factor Authentication</h6>
+                                <p>Add an extra layer of security to your account</p>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="twoFactorAuth">
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h6>Dark Mode</h6>
+                                <p>Switch between light and dark themes</p>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="darkMode">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="JavaScript/storage.js"></script>
+    <script src="JavaScript/auth.js"></script>
+    <script src="JavaScript/main.js"></script>
+
+    <style>
+        .profile-pic-wrapper {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pic-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-pic-wrapper:hover .pic-overlay {
+            opacity: 1;
+        }
+
+        .pic-overlay i {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h6 {
+            margin: 0;
+            color: var(--black-color);
+        }
+
+        .setting-info p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .form-check-input {
+            width: 3em;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user profile data
+            const user = UserManager.getUser();
+            if (user) {
+                document.getElementById('fullName').value = user.name || '';
+                document.getElementById('email').value = user.email || '';
+                document.getElementById('phone').value = user.phone || '';
+                document.getElementById('birthDate').value = user.birthDate || '';
+                document.getElementById('bio').value = user.bio || '';
+                
+                // Update profile pictures
+                const profilePics = document.querySelectorAll('#profilePic, #profileImage, .dropdown-header img');
+                profilePics.forEach(pic => {
+                    pic.src = user.imageUrl || 'contents/default_pp.jpg';
+                    pic.onerror = function() {
+                        this.src = 'contents/default_pp.jpg';
+                    };
+                });
+            }
+
+            // Profile picture change handler
+            document.getElementById('profilePicInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageUrl = e.target.result;
+                        // Update all profile pictures
+                        document.querySelectorAll('#profilePic, #profileImage, .dropdown-header img')
+                            .forEach(img => img.src = imageUrl);
+                        
+                        // Update user data
+                        const user = UserManager.getUser();
+                        if (user) {
+                            user.imageUrl = imageUrl;
+                            UserManager.setUser(user);
+                            showNotification('Profile picture updated successfully!', 'success');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Profile form submission
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = {
+                    name: document.getElementById('fullName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    birthDate: document.getElementById('birthDate').value,
+                    bio: document.getElementById('bio').value,
+                    imageUrl: document.querySelector('#profilePic').src
+                };
+
+                // Update user data
+                const user = UserManager.getUser();
+                if (user) {
+                    const updatedUser = { ...user, ...formData };
+                    UserManager.setUser(updatedUser);
+                    
+                    // Update UI elements
+                    document.querySelectorAll('#userName, #dropdownUserName').forEach(el => {
+                        el.textContent = formData.name;
+                    });
+                    document.getElementById('dropdownUserEmail').textContent = formData.email;
+                    
+                    showNotification('Profile updated successfully!', 'success');
+                }
+            });
+
+            // Settings change handlers
+            document.getElementById('emailNotifications').addEventListener('change', function(e) {
+                showNotification(
+                    e.target.checked ? 'Email notifications enabled' : 'Email notifications disabled',
+                    'success'
+                );
+            });
+
+            document.getElementById('twoFactorAuth').addEventListener('change', function(e) {
+                if (e.target.checked) {
+                    // In a real app, this would trigger 2FA setup
+                    showNotification('Two-factor authentication setup required', 'info');
+                } else {
+                    showNotification('Two-factor authentication disabled', 'success');
+                }
+            });
+
+            document.getElementById('darkMode').addEventListener('change', function(e) {
+                document.body.setAttribute('data-theme', e.target.checked ? 'dark' : 'light');
+                showNotification(
+                    e.target.checked ? 'Dark mode enabled' : 'Light mode enabled',
+                    'success'
+                );
+            });
+        });
+    </script>
+</body>
+</html> 

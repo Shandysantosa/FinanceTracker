@@ -58,8 +58,8 @@
                 <span>Financial Insights</span>
             </div>
             <div class="search-box">
-                <input type="text" placeholder="Search insights...">
                 <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search insights...">
             </div>
             <div class="profile-wrapper">
                 <div class="profile-details" id="profileToggle">
@@ -77,11 +77,11 @@
                     </div>
                     <div class="dropdown-divider"></div>
                     <div class="dropdown-body">
-                        <a href="#" class="dropdown-item">
+                        <a href="profile.html" class="dropdown-item">
                             <i class="fas fa-user"></i>
                             <span>Profile</span>
                         </a>
-                        <a href="#" class="dropdown-item">
+                        <a href="settings.html" class="dropdown-item">
                             <i class="fas fa-cog"></i>
                             <span>Settings</span>
                         </a>
@@ -213,7 +213,15 @@
         // Initialize insights page
         document.addEventListener('DOMContentLoaded', function() {
             updateInsightsData();
-            initializeInsightCharts();
+            initializeCharts();
+
+            // Listen for storage changes
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'transactions') {
+                    updateInsightsData();
+                    updateCharts(TransactionManager.getTransactions());
+                }
+            });
         });
 
         function updateInsightsData() {
@@ -250,7 +258,7 @@
             const expenseTransactions = transactions.filter(t => t.type === 'expense');
             const categoryTotals = Analytics.getCategoryTotals(expenseTransactions);
             const sortedCategories = Object.entries(categoryTotals)
-                .sort(([,a], [,b]) => b - a)
+                .sort(([,a], [,b]) => b.amount - a.amount)
                 .slice(0, 5);
 
             const container = document.getElementById('topCategories');
@@ -261,8 +269,7 @@
                 return;
             }
 
-            sortedCategories.forEach(([category, amount], index) => {
-                const percentage = (amount / Analytics.getTotalExpenses(expenseTransactions) * 100).toFixed(1);
+            sortedCategories.forEach(([category, data], index) => {
                 const item = document.createElement('div');
                 item.className = 'category-item mb-3';
                 item.innerHTML = `
@@ -272,8 +279,16 @@
                             <strong>${category}</strong>
                         </div>
                         <div class="text-end">
-                            <div>${formatCurrency(amount)}</div>
-                            <small class="text-muted">${percentage}%</small>
+                            <div>${formatCurrency(data.amount)}</div>
+                            <small class="text-muted">${data.percentage}%</small>
+                        </div>
+                    </div>
+                    <div class="progress mt-2" style="height: 5px;">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: ${data.percentage}%;" 
+                             aria-valuenow="${data.percentage}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
                         </div>
                     </div>
                 `;
@@ -344,28 +359,34 @@
             // Top category insight
             const expenseTransactions = transactions.filter(t => t.type === 'expense');
             const categoryTotals = Analytics.getCategoryTotals(expenseTransactions);
-            const topCategory = Object.entries(categoryTotals).sort(([,a], [,b]) => b - a)[0];
+            const topCategory = Object.entries(categoryTotals).sort(([,a], [,b]) => b.amount - a.amount)[0];
             
             if (topCategory) {
-                const [category, amount] = topCategory;
-                const percentage = (amount / totalExpenses * 100).toFixed(1);
+                const [category, data] = topCategory;
                 insights.push({
                     icon: 'fa-chart-pie',
                     type: 'info',
                     title: 'Top Spending Category',
-                    description: `${category} accounts for ${percentage}% of your total expenses (${formatCurrency(amount)}).`
+                    description: `${category} accounts for ${data.percentage}% of your total expenses (${formatCurrency(data.amount)}).`
                 });
             }
 
             return insights;
         }
 
-        function initializeInsightCharts() {
+        function initializeCharts() {
             const transactions = TransactionManager.getTransactions();
             if (transactions.length === 0) return;
 
             // Initialize charts with actual data
             updateCharts(transactions);
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
         }
     </script>
 </body>

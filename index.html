@@ -58,8 +58,8 @@
                 <span class="dashboard">Dashboard</span>
             </div>
             <div class="search-box">
-                <input type="text" placeholder="Search transactions...">
                 <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search transactions...">
             </div>
             <div class="profile-wrapper">
                 <div class="profile-details" id="profileToggle">
@@ -77,11 +77,11 @@
                     </div>
                     <div class="dropdown-divider"></div>
                     <div class="dropdown-body">
-                        <a href="#" class="dropdown-item">
+                        <a href="profile.html" class="dropdown-item">
                             <i class="fas fa-user"></i>
                             <span>Profile</span>
                         </a>
-                        <a href="#" class="dropdown-item">
+                        <a href="settings.html" class="dropdown-item">
                             <i class="fas fa-cog"></i>
                             <span>Settings</span>
                         </a>
@@ -210,5 +210,223 @@
     <script src="JavaScript/charts.js"></script>
     <script src="JavaScript/auth.js"></script>
     <script src="JavaScript/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts
+            initializeDashboardCharts();
+            
+            // Update recent transactions
+            updateRecentTransactions();
+
+            // Update dashboard data
+            updateDashboardData();
+
+            // Listen for storage changes
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'transactions') {
+                    updateDashboardData();
+                    updateRecentTransactions();
+                    updateDashboardCharts(TransactionManager.getTransactions());
+                }
+            });
+        });
+
+        function initializeDashboardCharts() {
+            const transactions = TransactionManager.getTransactions();
+            
+            // Initialize Category Chart
+            const categoryCtx = document.getElementById('categoryChart');
+            if (categoryCtx) {
+                window.categoryChart = new Chart(categoryCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            data: [],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.8)',
+                                'rgba(54, 162, 235, 0.8)',
+                                'rgba(255, 206, 86, 0.8)',
+                                'rgba(75, 192, 192, 0.8)',
+                                'rgba(153, 102, 255, 0.8)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initialize Trend Chart
+            const trendCtx = document.getElementById('trendChart');
+            if (trendCtx) {
+                window.trendChart = new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [
+                            {
+                                label: 'Income',
+                                data: [],
+                                borderColor: 'rgba(25, 135, 84, 0.8)',
+                                backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                                fill: true
+                            },
+                            {
+                                label: 'Expenses',
+                                data: [],
+                                borderColor: 'rgba(220, 53, 69, 0.8)',
+                                backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initial update
+            updateDashboardCharts(transactions);
+        }
+
+        function updateDashboardCharts(transactions) {
+            // Update Category Chart
+            if (window.categoryChart) {
+                const expensesByCategory = transactions
+                    .filter(t => t.type === 'expense')
+                    .reduce((acc, t) => {
+                        acc[t.category] = (acc[t.category] || 0) + parseFloat(t.amount);
+                        return acc;
+                    }, {});
+
+                window.categoryChart.data.labels = Object.keys(expensesByCategory);
+                window.categoryChart.data.datasets[0].data = Object.values(expensesByCategory);
+                window.categoryChart.update();
+            }
+
+            // Update Trend Chart
+            if (window.trendChart) {
+                const monthlyData = {};
+                
+                // Get last 6 months
+                const today = new Date();
+                for (let i = 5; i >= 0; i--) {
+                    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+                    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    monthlyData[monthKey] = { income: 0, expenses: 0 };
+                }
+                
+                // Process transactions
+                transactions.forEach(t => {
+                    const date = new Date(t.date);
+                    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    
+                    if (monthlyData[monthKey]) {
+                        if (t.type === 'income') {
+                            monthlyData[monthKey].income += parseFloat(t.amount);
+                        } else {
+                            monthlyData[monthKey].expenses += parseFloat(t.amount);
+                        }
+                    }
+                });
+
+                // Sort months
+                const sortedMonths = Object.keys(monthlyData).sort();
+
+                // Update chart data
+                window.trendChart.data.labels = sortedMonths.map(month => {
+                    const [year, monthNum] = month.split('-');
+                    return new Date(year, monthNum - 1).toLocaleDateString('default', { 
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                });
+
+                window.trendChart.data.datasets[0].data = sortedMonths.map(month => monthlyData[month].income);
+                window.trendChart.data.datasets[1].data = sortedMonths.map(month => monthlyData[month].expenses);
+                window.trendChart.update();
+            }
+        }
+
+        function updateDashboardData() {
+            const transactions = TransactionManager.getTransactions();
+            
+            // Calculate totals
+            const totalIncome = transactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            
+            const totalExpenses = transactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            
+            const balance = totalIncome - totalExpenses;
+
+            // Update overview boxes
+            document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
+            document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('balance').textContent = formatCurrency(balance);
+            document.getElementById('monthlyNet').textContent = formatCurrency(balance);
+
+            // Update charts
+            updateDashboardCharts(transactions);
+        }
+
+        function updateRecentTransactions() {
+            const transactions = TransactionManager.getTransactions()
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+
+            const recentTransactionsElement = document.getElementById('recentTransactions');
+            
+            if (transactions.length === 0) {
+                recentTransactionsElement.innerHTML = '<p class="text-muted">No recent transactions</p>';
+                return;
+            }
+
+            recentTransactionsElement.innerHTML = transactions.map(transaction => `
+                <div class="transaction-item mb-3 p-3 bg-light rounded">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${transaction.description || transaction.category}</strong>
+                            <div class="text-muted small">
+                                ${transaction.category} • ${new Date(transaction.date).toLocaleDateString()}
+                            </div>
+                        </div>
+                        <div class="text-${transaction.type === 'income' ? 'success' : 'danger'} fw-bold">
+                            ${transaction.type === 'income' ? '+' : '-'}${formatCurrency(transaction.amount)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+    </script>
 </body>
 </html>
