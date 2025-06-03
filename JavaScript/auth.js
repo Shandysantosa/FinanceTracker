@@ -26,24 +26,15 @@ const AuthManager = {
 
     // Handle logout from any page
     logout: function() {
-        return new Promise((resolve) => {
-            if (confirm('Are you sure you want to logout?')) {
-                UserManager.logout();
-                
-                // Show notification
-                if (typeof showNotification === 'function') {
-                    showNotification('Logged out successfully', 'success');
-                }
-                
-                // Redirect to login page after a short delay
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                    resolve(true);
-                }, 1000);
-            } else {
-                resolve(false);
-            }
-        });
+        try {
+            // Clear all user data
+            localStorage.clear();
+            sessionStorage.clear();
+            showNotification('Successfully logged out', 'success');
+        } catch (error) {
+            console.error('Error during logout:', error);
+            showNotification('Error during logout', 'error');
+        }
     },
 
     // Get current user with fallback
@@ -54,38 +45,6 @@ const AuthManager = {
             return null;
         }
         return user;
-    }
-};
-
-// Google Sign-In Configuration
-const GoogleAuth = {
-    clientId: '951177710655-hktcr9qj45odpnepihu1uhlni7uvs1qj.apps.googleusercontent.com', // Replace with your actual Client ID
-    
-    // Initialize Google Sign-In
-    init: function() {
-        // This will be called when the Google script loads
-        window.addEventListener('load', () => {
-            if (typeof google !== 'undefined' && google.accounts) {
-                google.accounts.id.initialize({
-                    client_id: this.clientId,
-                    callback: this.handleCredentialResponse
-                });
-            }
-        });
-    },
-
-    // Handle the credential response from Google
-    handleCredentialResponse: function(response) {
-        console.log('Google Sign-In Response:', response);
-        // The actual handling is done in the login.html file
-        // This is here for reference and potential future use
-    },
-
-    // Programmatic sign out (if needed)
-    signOut: function() {
-        if (typeof google !== 'undefined' && google.accounts) {
-            google.accounts.id.disableAutoSelect();
-        }
     }
 };
 
@@ -240,12 +199,6 @@ const UserManager = {
             // Clear all user data
             localStorage.clear();
             sessionStorage.clear();
-            
-            // Clear any active sessions or tokens
-            if (typeof google !== 'undefined' && google.accounts) {
-                google.accounts.id.disableAutoSelect();
-            }
-            
             showNotification('Successfully logged out', 'success');
         } catch (error) {
             console.error('Error during logout:', error);
@@ -306,9 +259,7 @@ function resetActivityTimer() {
     }
 });
 
-// Export for global use
 window.AuthManager = AuthManager;
-window.GoogleAuth = GoogleAuth;
 window.UserSessionManager = UserSessionManager;
 window.RouteProtection = RouteProtection;
 window.UserManager = UserManager; 

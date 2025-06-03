@@ -172,9 +172,17 @@
                 <div class="box">
                     <div class="title d-flex justify-content-between align-items-center">
                         <span><i class="fas fa-history me-2"></i>Transaction History</span>
-                        <a href="add.html" class="btn btn-primary btn-sm">
-                            <i class="fas fa-plus me-1"></i>Add New
-                        </a>
+                        <div>
+                            <button onclick="exportTransactions('csv')" class="btn btn-success btn-sm me-2">
+                                <i class="fas fa-file-csv me-1"></i>Export CSV
+                            </button>
+                            <button onclick="exportTransactions('excel')" class="btn btn-primary btn-sm me-2">
+                                <i class="fas fa-file-excel me-1"></i>Export Excel
+                            </button>
+                            <a href="add.html" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i>Add New
+                            </a>
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
@@ -332,6 +340,79 @@
                 style: 'currency',
                 currency: 'USD'
             }).format(amount);
+        }
+
+        function exportTransactions(format) {
+            const transactions = getFilteredTransactions();
+            if (transactions.length === 0) {
+                showNotification('No transactions to export', 'warning');
+                return;
+            }
+
+            const headers = ['Date', 'Type', 'Category', 'Amount', 'Description'];
+            let csvContent = headers.join(',') + '\n';
+
+            transactions.forEach(transaction => {
+                const row = [
+                    new Date(transaction.date).toLocaleDateString(),
+                    transaction.type,
+                    transaction.category,
+                    formatCurrency(transaction.amount).replace(/[^0-9.-]/g, ''),
+                    `"${transaction.description || ''}"`
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const fileName = `finance_tracker_transactions_${new Date().toISOString().split('T')[0]}`;
+
+            if (format === 'excel') {
+                link.setAttribute('download', `${fileName}.xls`);
+                link.setAttribute('href', 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(csvContent));
+            } else {
+                link.setAttribute('download', `${fileName}.csv`);
+                link.setAttribute('href', window.URL.createObjectURL(blob));
+            }
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showNotification(`Transactions exported successfully as ${format.toUpperCase()}`, 'success');
+        }
+
+        function getFilteredTransactions() {
+            const filters = {
+                type: document.getElementById('typeFilter').value,
+                category: document.getElementById('categoryFilter').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                search: document.querySelector('.search-box input').value.toLowerCase().trim()
+            };
+
+            let transactions = TransactionManager.getTransactions();
+
+            // Apply filters
+            if (filters.type) {
+                transactions = transactions.filter(t => t.type === filters.type);
+            }
+            if (filters.category) {
+                transactions = transactions.filter(t => t.category === filters.category);
+            }
+            if (filters.startDate) {
+                transactions = transactions.filter(t => t.date >= filters.startDate);
+            }
+            if (filters.endDate) {
+                transactions = transactions.filter(t => t.date <= filters.endDate);
+            }
+            if (filters.search) {
+                transactions = transactions.filter(t => 
+                    (t.category && t.category.toLowerCase().includes(filters.search)) ||
+                    (t.description && t.description.toLowerCase().includes(filters.search))
+                );
+            }
+
+            return transactions;
         }
     </script>
 </body>

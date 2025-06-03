@@ -65,18 +65,15 @@
 
 /* Google Sign In Section */
 .google-signin-section {
-    margin-bottom: 25px;
-    display: flex;
-    justify-content: center;
+    display: none;
 }
 
 .g_id_signin {
-    width: 100% !important;
+    display: none;
 }
 
 .g_id_signin > div {
-    margin: 0 auto !important;
-    width: 100% !important;
+    display: none;
 }
 
 /* Divider */

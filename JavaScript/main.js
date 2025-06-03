@@ -91,6 +91,15 @@ function setupEventListeners() {
             });
         }
 
+        // Help button
+        const helpButton = document.querySelector('.dropdown-item[href="help.html"]');
+        if (helpButton) {
+            helpButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'help.html';
+            });
+        }
+
         // Transaction type change event
         if (transactionType) {
             transactionType.addEventListener('change', function() {

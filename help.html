@@ -3,291 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help & Support - Finance Tracker</title>
+    <title>Help - Finance Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <nav class="sidebar">
-        <div class="logo-details">
-            <i class="fas fa-wallet"></i>
-            <span class="logo_name">Finance Tracker</span>
-        </div>
-        <ul class="nav-links">
-            <li>
-                <a href="index.html">
-                    <i class="fas fa-home"></i>
-                    <span class="link_name">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="add.html">
-                    <i class="fas fa-plus-circle"></i>
-                    <span class="link_name">Add Transaction</span>
-                </a>
-            </li>
-            <li>
-                <a href="history.html">
-                    <i class="fas fa-history"></i>
-                    <span class="link_name">History</span>
-                </a>
-            </li>
-            <li>
-                <a href="insights.html">
-                    <i class="fas fa-chart-pie"></i>
-                    <span class="link_name">Insights</span>
-                </a>
-            </li>
-            <li>
-                <a href="tips.html">
-                    <i class="fas fa-lightbulb"></i>
-                    <span class="link_name">Tips</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Main Content -->
-    <section class="home-section">
-        <nav class="navbar">
-            <div class="sidebar-button">
-                <i class="fas fa-bars sidebarBtn"></i>
-                <span>Help & Support</span>
-            </div>
-            <div class="search-box">
-                <input type="text" placeholder="Search help topics...">
-                <i class="fas fa-search"></i>
-            </div>
-            <div class="profile-wrapper">
-                <div class="profile-details" id="profileToggle">
-                    <img src="contents/default_pp.jpg" alt="Profile" id="profileImage">
-                    <span class="admin_name" id="userName">User</span>
-                    <i class="fas fa-chevron-down profile-arrow"></i>
-                </div>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <div class="dropdown-header">
-                        <img src="contents/default_pp.jpg" alt="Profile">
-                        <div class="user-info">
-                            <h5 id="dropdownUserName">User</h5>
-                            <p id="dropdownUserEmail">user@example.com</p>
-                        </div>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-body">
-                        <a href="profile.html" class="dropdown-item">
-                            <i class="fas fa-user"></i>
-                            <span>Profile</span>
-                        </a>
-                        <a href="settings.html" class="dropdown-item">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </a>
-                        <a href="help.html" class="dropdown-item">
-                            <i class="fas fa-question-circle"></i>
-                            <span>Help</span>
-                        </a>
-                    </div>
-                    <div class="dropdown-divider"></div>
-                    <div class="dropdown-footer">
-                        <a href="#" class="dropdown-item logout-btn" id="logoutBtn">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Logout</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <div class="home-content">
-            <!-- Quick Help Section -->
-            <div class="overview-boxes">
-                <div class="box clickable" onclick="scrollToSection('faq')">
-                    <div class="right-side">
-                        <div class="box-topic">FAQ</div>
-                        <div class="indicator">
-                            <i class="fas fa-question-circle"></i>
-                            <span class="text">Frequently Asked Questions</span>
-                        </div>
-                    </div>
-                    <i class="fas fa-book cart"></i>
-                </div>
-                <div class="box clickable" onclick="scrollToSection('contact')">
-                    <div class="right-side">
-                        <div class="box-topic">Contact Us</div>
-                        <div class="indicator">
-                            <i class="fas fa-envelope"></i>
-                            <span class="text">Get in touch</span>
-                        </div>
-                    </div>
-                    <i class="fas fa-headset cart two"></i>
-                </div>
-                <div class="box clickable" onclick="window.open('https://github.com/yourusername/finance-tracker')">
-                    <div class="right-side">
-                        <div class="box-topic">GitHub</div>
-                        <div class="indicator">
-                            <i class="fas fa-code-branch"></i>
-                            <span class="text">View source code</span>
-                        </div>
-                    </div>
-                    <i class="fab fa-github cart three"></i>
-                </div>
-            </div>
-
-            <!-- FAQ Section -->
-            <div class="sales-boxes" id="faq">
-                <div class="box">
-                    <div class="title">
-                        <i class="fas fa-question-circle me-2"></i>Frequently Asked Questions
-                    </div>
-                    <div class="accordion" id="faqAccordion">
-                        <!-- FAQ items will be dynamically populated -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contact Form -->
-            <div class="sales-boxes" id="contact">
-                <div class="box">
-                    <div class="title">
-                        <i class="fas fa-envelope me-2"></i>Contact Us
-                    </div>
-                    <form id="contactForm" class="mt-4">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label">Your Name</label>
-                                <input type="text" class="form-control" id="name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" required>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <h1 class="text-center mb-4">Help Center</h1>
+                        
+                        <div class="mb-5">
+                            <h2><i class="fas fa-book me-2"></i>Getting Started</h2>
+                            <div class="ps-4 mt-3">
+                                <h5>1. Dashboard Overview</h5>
+                                <p>The dashboard shows your financial overview including total income, expenses, and recent transactions.</p>
+                                
+                                <h5>2. Adding Transactions</h5>
+                                <p>Click the "Add Transaction" button to record new income or expenses. Fill in the required details and submit.</p>
+                                
+                                <h5>3. Viewing History</h5>
+                                <p>Access your transaction history, apply filters, and export data in CSV or Excel format.</p>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="subject" class="form-label">Subject</label>
-                            <input type="text" class="form-control" id="subject" required>
+
+                        <div class="mb-5">
+                            <h2><i class="fas fa-cog me-2"></i>Settings</h2>
+                            <div class="ps-4 mt-3">
+                                <h5>1. Profile Settings</h5>
+                                <p>Update your profile information and preferences.</p>
+                                
+                                <h5>2. Currency Settings</h5>
+                                <p>Choose your preferred currency for displaying amounts.</p>
+                                
+                                <h5>3. Date Format</h5>
+                                <p>Select your preferred date format for displaying dates.</p>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" rows="5" required></textarea>
+
+                        <div class="mb-5">
+                            <h2><i class="fas fa-chart-pie me-2"></i>Features</h2>
+                            <div class="ps-4 mt-3">
+                                <h5>1. Financial Insights</h5>
+                                <p>View charts and analytics about your spending patterns.</p>
+                                
+                                <h5>2. Export Data</h5>
+                                <p>Export your transaction history in CSV or Excel format.</p>
+                                
+                                <h5>3. Search & Filter</h5>
+                                <p>Use the search bar and filters to find specific transactions.</p>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane me-2"></i>Send Message
-                        </button>
-                    </form>
+
+                        <div class="text-center mt-5">
+                            <a href="index.html" class="btn btn-primary">Back to Dashboard</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="JavaScript/storage.js"></script>
     <script src="JavaScript/auth.js"></script>
     <script src="JavaScript/main.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Populate FAQ items
-            const faqs = [
-                {
-                    question: 'How do I add a new transaction?',
-                    answer: 'Click on the "Add Transaction" button in the sidebar or dashboard, fill in the transaction details, and click "Add Transaction" to save.'
-                },
-                {
-                    question: 'How can I change my profile picture?',
-                    answer: 'Go to your profile page, hover over your current profile picture, and click the camera icon to upload a new image.'
-                },
-                {
-                    question: 'How do I view my transaction history?',
-                    answer: 'Click on the "History" link in the sidebar to view all your past transactions. You can filter and search through them.'
-                },
-                {
-                    question: 'Can I export my transaction data?',
-                    answer: 'Yes, go to the History page and click the "Export" button to download your transaction data in CSV format.'
-                },
-                {
-                    question: 'How do I change my currency preferences?',
-                    answer: 'Go to Settings, scroll to "Currency Preferences" and select your preferred currency from the dropdown menu.'
-                }
-            ];
-
-            const accordion = document.getElementById('faqAccordion');
-            faqs.forEach((faq, index) => {
-                const item = document.createElement('div');
-                item.className = 'accordion-item';
-                item.innerHTML = `
-                    <h2 class="accordion-header">
-                        <button class="accordion-button ${index === 0 ? '' : 'collapsed'}" type="button" 
-                                data-bs-toggle="collapse" data-bs-target="#faq${index}">
-                            ${faq.question}
-                        </button>
-                    </h2>
-                    <div id="faq${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" 
-                         data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            ${faq.answer}
-                        </div>
-                    </div>
-                `;
-                accordion.appendChild(item);
-            });
-
-            // Handle contact form submission
-            document.getElementById('contactForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = 'shandysantosa23@gmail.com';
-                const subject = document.getElementById('subject').value;
-                const message = document.getElementById('message').value;
-                
-                // Create mailto link
-                const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-                window.location.href = mailtoLink;
-                
-                showNotification('Opening your email client...', 'info');
-            });
-        });
-
-        function scrollToSection(sectionId) {
-            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
-
-    <style>
-        .accordion-item {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            overflow: hidden;
-        }
-
-        .accordion-button {
-            background: var(--card-background);
-            color: var(--text-color);
-            padding: 15px 20px;
-            font-weight: 500;
-        }
-
-        .accordion-button:not(.collapsed) {
-            background: var(--primary-color);
-            color: var(--white-color);
-        }
-
-        .accordion-body {
-            background: var(--card-background);
-            padding: 20px;
-            color: var(--text-color);
-        }
-
-        .clickable {
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .clickable:hover {
-            transform: translateY(-5px);
-        }
-    </style>
 </body>
 </html> 
