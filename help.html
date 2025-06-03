@@ -3,71 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help - Finance Tracker</title>
+    <title>Help & Support - Finance Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .faq-section {
+            background: var(--card-background);
+            border-radius: 16px;
+            box-shadow: var(--box-shadow);
+            padding: 40px 30px;
+            margin-bottom: 40px;
+        }
+        .faq-question {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .faq-answer {
+            color: var(--text-color);
+            margin-bottom: 24px;
+        }
+        .contact-section {
+            background: var(--card-background);
+            border-radius: 16px;
+            box-shadow: var(--box-shadow);
+            padding: 40px 30px;
+        }
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        .contact-link i {
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card shadow">
-                    <div class="card-body p-5">
-                        <h1 class="text-center mb-4">Help Center</h1>
-                        
-                        <div class="mb-5">
-                            <h2><i class="fas fa-book me-2"></i>Getting Started</h2>
-                            <div class="ps-4 mt-3">
-                                <h5>1. Dashboard Overview</h5>
-                                <p>The dashboard shows your financial overview including total income, expenses, and recent transactions.</p>
-                                
-                                <h5>2. Adding Transactions</h5>
-                                <p>Click the "Add Transaction" button to record new income or expenses. Fill in the required details and submit.</p>
-                                
-                                <h5>3. Viewing History</h5>
-                                <p>Access your transaction history, apply filters, and export data in CSV or Excel format.</p>
-                            </div>
-                        </div>
-
-                        <div class="mb-5">
-                            <h2><i class="fas fa-cog me-2"></i>Settings</h2>
-                            <div class="ps-4 mt-3">
-                                <h5>1. Profile Settings</h5>
-                                <p>Update your profile information and preferences.</p>
-                                
-                                <h5>2. Currency Settings</h5>
-                                <p>Choose your preferred currency for displaying amounts.</p>
-                                
-                                <h5>3. Date Format</h5>
-                                <p>Select your preferred date format for displaying dates.</p>
-                            </div>
-                        </div>
-
-                        <div class="mb-5">
-                            <h2><i class="fas fa-chart-pie me-2"></i>Features</h2>
-                            <div class="ps-4 mt-3">
-                                <h5>1. Financial Insights</h5>
-                                <p>View charts and analytics about your spending patterns.</p>
-                                
-                                <h5>2. Export Data</h5>
-                                <p>Export your transaction history in CSV or Excel format.</p>
-                                
-                                <h5>3. Search & Filter</h5>
-                                <p>Use the search bar and filters to find specific transactions.</p>
-                            </div>
-                        </div>
-
-                        <div class="text-center mt-5">
-                            <a href="index.html" class="btn btn-primary">Back to Dashboard</a>
-                        </div>
+                <div class="faq-section mb-5">
+                    <h1 class="text-center mb-4"><i class="fas fa-question-circle me-2"></i>Frequently Asked Questions</h1>
+                    <div class="mb-4">
+                        <div class="faq-question">How do I add a new transaction?</div>
+                        <div class="faq-answer">Go to the <strong>Add Transaction</strong> page from the sidebar, fill in the required details, and click <strong>Add Transaction</strong>.</div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="faq-question">Can I edit or delete a transaction?</div>
+                        <div class="faq-answer">Currently, you can delete a transaction from the <strong>History</strong> page. Editing is not yet supported but will be added in future updates.</div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="faq-question">How do I change my profile or settings?</div>
+                        <div class="faq-answer">Click your profile icon in the top right, then select <strong>Profile</strong> or <strong>Settings</strong> from the dropdown menu.</div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="faq-question">How can I export my transaction history?</div>
+                        <div class="faq-answer">On the <strong>History</strong> page, use the <strong>Export CSV</strong> or <strong>Export Excel</strong> buttons to download your data.</div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="faq-question">Is my data secure?</div>
+                        <div class="faq-answer">Your data is stored locally in your browser for privacy. No financial data is sent to any server unless you use the optional PHP backend.</div>
+                    </div>
+                </div>
+                <div class="contact-section text-center">
+                    <h2 class="mb-4"><i class="fas fa-envelope me-2"></i>Contact & Support</h2>
+                    <div class="contact-link">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:shandysantosa@gmail.com">shandysantosa@gmail.com</a>
+                    </div>
+                    <div class="contact-link">
+                        <i class="fab fa-github"></i>
+                        <a href="https://github.com/Shandysantosa/FinanceTracker/tree/main" target="_blank">GitHub Repository</a>
+                    </div>
+                    <div class="mt-4">
+                        <a href="index.html" class="btn btn-primary"><i class="fas fa-arrow-left me-2"></i>Back to Dashboard</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="JavaScript/storage.js"></script>
     <script src="JavaScript/auth.js"></script>
